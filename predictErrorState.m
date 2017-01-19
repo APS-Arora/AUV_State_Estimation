@@ -20,5 +20,5 @@ phi=gamma((length(delx_prev):2*length(delx_prev)-1),(length(delx_prev):2*length(
 Q_d=phi*gamma((1:length(delx_prev)),(length(delx_prev):2*length(delx_prev)-1));
 delx_pred=phi*delx_prev;
 cov_pred=phi*cov_prev*phi'+Q_d;
-
+end
 
