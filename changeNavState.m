@@ -11,5 +11,5 @@ g_cap=earth_gravity-earth_rate_mat^2*X(1:3);
 dX_cap(1:3)=Rp2t_cap*X(7:9);
 dX_cap(4:6)=omega_cap\(imu(4:6)-X(13:15)-Rt2p_cap*earth_rate);
 dX_cap(7:9)=imu(1:3)-X(10:12)+Rt2p_cap*g_cap-Rt2p_cap*earth_rate_mat*Rt2p_cap*X(7:9)-cross(imu(4:6)-X(13:15),X(7:9));
-dX_cap(10:15)=0;
+dX_cap(10:15)=-diag([1/accel_corr_time,1/accel_corr_time,1/accel_corr_time,1/gyro_corr_time,1/gyro_corr_time,1/gyro_corr_time])*X(10:15);
 end

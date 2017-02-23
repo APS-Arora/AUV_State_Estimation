@@ -13,7 +13,7 @@ F33=-crossProductMatrix(IMUInput(4:6)-X_cap(13:15))-Rt2p_cap*earth_rate_mat*Rp2t
 F=[zeros(3),F12,Rp2t_cap,zeros(3),zeros(3);
    zeros(3),-earth_rate_mat,zeros(3),zeros(3),-Rp2t_cap;
    zeros(3),F32,F33,-eye(3),-crossProductMatrix(X_cap(7:9))];
-F=[F;zeros(6,15)];
+F=[F;zeros(6,9),-inv(diag([accel_corr_time,accel_corr_time,accel_corr_time,gyro_corr_time,gyro_corr_time,gyro_corr_time]))];
 %% The G Matrix
 G=zeros(15,12);
 G(4:6,4:6)=-Rp2t_cap;
@@ -21,7 +21,11 @@ G(7:9,1:3)=-eye(3);
 G(7:9,4:6)=-crossProductMatrix(X_cap(7:9));
 G(10:15,7:12)=eye(6);
 %% The Process Noise Input Vector
-Q=0;
+Q=zeros(12);
+Q(1:3,1:3)=sigma_a*eye(3);
+Q(4:6,4:6)=sigma_g*eye(3);
+Q(7:9,7:9)=sigma_a_bais*eye(3);
+Q(10:12,10:12)=sigma_g_bais*eye(3);
 %% Computation of Propagation Parameters
 gamma=expm([-F,G*Q*G';zeros(size(F)),F']*dt);
 phi=gamma((length(delx_prev):2*length(delx_prev)-1),(length(delx_prev):2*length(delx_prev)-1))';
